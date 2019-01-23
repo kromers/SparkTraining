@@ -15,4 +15,5 @@ object SortProblem extends App {
   val sc = new SparkContext(conf)
 
   val lines = sc.textFile("in/RealEstate.csv")
+
 }
