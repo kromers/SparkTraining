@@ -40,4 +40,28 @@ object SortProblem extends App {
   val sc = new SparkContext(conf)
 
   val lines = sc.textFile("in/RealEstate.csv")
+
+  // Eliminamos la primera línea que es la cabecera
+  val noHeadLines = lines.filter(l => !l.contains("MLS"))
+
+
+  // Creamos un nuevo RDD que contiene solo número de habitaciones (columna 4)y el precio de la vivienda (columna 3)
+  // Casteamos la columna 4 a entero y la columna 3 a Double
+  val housePriceLine = noHeadLines.map(line => (line.split(",")(3).toInt,(1,line.split(",")(2).toDouble)))
+
+
+  // Contamos las casas que tienen una sola habitacion, las que tienen 2 habitaciones, ....
+  val housePrice = housePriceLine.reduceByKey((x,y) => (x._1 + y._1,x._2 + y._2))
+
+
+  val avgHousePrice = housePrice.map((x) => (x._1, mediaMap(x._2._1,x._2._2)))
+
+
+
+  avgHousePrice.take(5).foreach(println)
+
+  def mediaMap(contador:Int, total:Double): Double ={
+    total/contador
+  }
+
 }
