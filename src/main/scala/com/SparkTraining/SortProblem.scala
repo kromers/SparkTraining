@@ -1,39 +1,39 @@
 package com.SparkTraining
 
 import org.apache.log4j.{Level, Logger}
+import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
-import scala.util.{Try, Success, Failure}
+
+import scala.util.{Failure, Success, Try}
 
 /**
  * Hello world!
  *
  */
 object SortProblem extends App {
-  println( "Hello World!" )
+  println( "Ejemplo de Excepciones" )
 
   Logger.getLogger("org").setLevel(Level.ERROR)
   val conf = new SparkConf().setAppName("SortProblem").setMaster("local[*]")
   val sc = new SparkContext(conf)
 
-  //val lines = sc.textFile("in/RealEstate.csv")
+  //val lines = sc.textFile("in/RealEstates.csv")
 
-  divide
+  val lines = leerFichero("in/RealEstates.csv")
 
-  def divide: Try[Int] = {
-    val dividend = Try(Console.readLine("Enter an Int that you'd like to divide:\n").toInt)
-    val divisor = Try(Console.readLine("Enter an Int that you'd like to divide by:\n").toInt)
+  lines.take(5).foreach(println)
 
-    val problem = dividend.flatMap(x => divisor.map(y => x/y))
-    problem match {
-      case Success(v) =>
-        //println("Result of " + dividend.get + "/"+ divisor.get +" is: " + v)
-        println("Result of " + dividend.get + "/"+ divisor.get +" is: " + v)
-        Success(v)
+  def leerFichero(path: String): RDD[String] = {
+    Try(sc.textFile(path)) match {
+      case Success(a) =>
+        println("Existe el fichero")
+        a
       case Failure(e) =>
-        println("You must've divided by zero or entered something that's not an Int. Try again!")
-        println("Info from the exception: " + e.getMessage)
-        divide
+        println("Error: " + e.getMessage)
+        Failure(e).get
+
     }
+
   }
 
 }
