@@ -29,7 +29,7 @@ object SortProblem extends App {
         println("Existe el fichero")
         a
       case Failure(e) =>
-        println("Error: " + e.getMessage)
+        println("Error (no existe el fichero): " + e.getMessage)
         Failure(e).get
 
     }
