@@ -19,7 +19,7 @@ object SortProblem extends App {
 
   //val lines = sc.textFile("in/RealEstates.csv")
 
-  val lines = leerFichero("in/RealEstates.csv")
+  val lines = leerFichero("in/RealEstate.csv")
 
   lines.take(5).foreach(println)
 
